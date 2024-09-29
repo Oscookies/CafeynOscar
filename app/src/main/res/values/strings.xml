@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CafeynOscar</string>
+    <string name="quit">Annuler</string>
+    <string name="interests">Interests</string>
+    <string name="save">Enregistrer</string>
+    <string name="interest_title">Organisez vos centres d\'intérêt</string>
+    <string name="interest_subtitle">Ajoutez ou supprimez des centres d\'intérêt.</string>
+    <string name="discover">À découvrir</string>
+</resources>
