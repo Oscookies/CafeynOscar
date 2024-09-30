@@ -52,6 +52,7 @@ class TopicRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveFavoriteTopics(topics: List<Topic>) {
+        topicDao.deleteFavoriteTopics()
         topicDao.insertFavoriteTopicList(topics.asEntity())
     }
 

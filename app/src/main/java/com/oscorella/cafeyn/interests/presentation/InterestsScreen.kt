@@ -167,7 +167,7 @@ fun SharedTransitionScope.InterestsContent(
                                 .align(Alignment.CenterHorizontally)
                                 .fillMaxWidth()
                                 .padding(12.dp),
-                            text = "Acun centre de interet selectioné",
+                            text = stringResource(R.string.no_topic_selected_title),
                             style = MaterialTheme.typography.titleMedium,
                         )
                         Text(
@@ -175,7 +175,7 @@ fun SharedTransitionScope.InterestsContent(
                                 .align(Alignment.CenterHorizontally)
                                 .fillMaxWidth()
                                 .padding(12.dp),
-                            text = "Votre acceuil será personalisé",
+                            text = stringResource(R.string.no_topic_selected_subtitle),
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

@@ -6,4 +6,6 @@
     <string name="interest_title">Organisez vos centres d\'intérêt</string>
     <string name="interest_subtitle">Ajoutez ou supprimez des centres d\'intérêt.</string>
     <string name="discover">À découvrir</string>
+    <string name="no_topic_selected_title">Aucun centre de intérêt sélectionné</string>
+    <string name="no_topic_selected_subtitle">Votre accueil sera personnalisé en fonction de vos choix.</string>
 </resources>

@@ -27,7 +27,6 @@ class InterestsViewModel
     val uiState = _uiState
         .onStart {
             getTopics()
-            getFavoriteTopics()
         }
         .stateIn(
             scope = viewModelScope,
@@ -47,9 +46,7 @@ class InterestsViewModel
         viewModelScope.launch {
             when (val topics = topicRepository.getAllTopics()) {
                 is Result.Success -> {
-                    _uiState.tryEmit(InterestsUiState.Idle)
-                    orderedTopics.addAll(topics.data)
-                    _topicList.tryEmit(orderedTopics.toList())
+                    handleSuccessResult(topics.data)
                 }
                 is Result.Error -> {
                     //TODO: Handle error codes differently
@@ -59,12 +56,13 @@ class InterestsViewModel
         }
     }
 
-    private fun getFavoriteTopics() {
-        viewModelScope.launch {
-            _favoritesList.emit(
-                topicRepository.getFavoriteTopics()
-            )
-        }
+    private suspend  fun handleSuccessResult(topics: List<Topic>) {
+        val favoriteTopics = topicRepository.getFavoriteTopics()
+        orderedTopics.addAll(topics)
+        orderedTopics.removeAll(favoriteTopics.toSet())
+        _favoritesList.tryEmit(favoriteTopics)
+        _topicList.tryEmit(orderedTopics.toList())
+        _uiState.tryEmit(InterestsUiState.Idle)
     }
 
     fun addToFavorites(topic: Topic, index: Int) {
