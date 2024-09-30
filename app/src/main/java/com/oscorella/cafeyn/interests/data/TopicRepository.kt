@@ -5,19 +5,14 @@ import com.oscorella.cafeyn.core.db.mapper.asDomain
 import com.oscorella.cafeyn.core.db.mapper.asEntity
 import com.oscorella.cafeyn.core.di.CafeynDispatchers
 import com.oscorella.cafeyn.core.di.Dispatcher
+import com.oscorella.cafeyn.core.network.Result
 import com.oscorella.cafeyn.interests.domain.Topic
-import com.skydoves.sandwich.message
-import com.skydoves.sandwich.onFailure
-import com.skydoves.sandwich.onSuccess
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 interface TopicRepository {
 
-    suspend fun getAllTopics(
-        onSuccess: (List<Topic>) -> Unit,
-        onError: (String?) -> Unit,
-    )
+    suspend fun getAllTopics(): Result<List<Topic>>
 
     suspend fun getFavoriteTopics(): List<Topic>
 
@@ -31,15 +26,21 @@ class TopicRepositoryImpl @Inject constructor(
     @Dispatcher(CafeynDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : TopicRepository {
 
-    override suspend fun getAllTopics(
-        onSuccess: (List<Topic>) -> Unit,
-        onError: (String?) -> Unit,
-    ) {
+    override suspend fun getAllTopics(): Result<List<Topic>> {
         val response = topicService.getTopics()
-        response.onSuccess {
-            onSuccess(this.data)
-        }.onFailure {
-            onError(this.message())
+        return if(response.isSuccessful) {
+            response.body()?.let { data ->
+                val flattenedList = data.flatMap { topic -> mutableListOf(topic).also { it.addAll(topic.subTopics) }  }
+                Result.Success(flattenedList)
+            } ?: run {
+                /***
+                 * We assume that if the response is null, there is an error.
+                 */
+                Result.Error(response.message(), response.code())
+            }
+        }
+        else {
+            Result.Error(response.message(), response.code())
         }
     }
 

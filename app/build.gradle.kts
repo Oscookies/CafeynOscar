@@ -84,7 +84,6 @@ dependencies {
     //Network
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
-    implementation(libs.sandwich.retrofit)
     //DB
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)

@@ -2,7 +2,6 @@ package com.oscorella.cafeyn.core.di
 
 import com.oscorella.cafeyn.BuildConfig
 import com.oscorella.cafeyn.interests.data.TopicService
-import com.skydoves.sandwich.retrofit.adapters.ApiResponseCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,7 +37,6 @@ object NetworkModule {
         return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(BuildConfig.API_BASE_URL)
-            .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
             .addConverterFactory(gsonConverterFactory)
             .build()
     }

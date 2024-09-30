@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oscorella.cafeyn.interests.data.TopicRepository
 import com.oscorella.cafeyn.interests.domain.Topic
+import com.oscorella.cafeyn.core.network.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -40,15 +41,16 @@ class InterestsViewModel
 
     private fun getTopics() {
         viewModelScope.launch {
-            topicRepository.getAllTopics(
-                onSuccess = {
-                    _topicList.tryEmit(it)
+            when (val topics = topicRepository.getAllTopics()) {
+                is Result.Success -> {
                     _uiState.tryEmit(InterestsUiState.Idle)
-                },
-                onError = {
-                    _uiState.tryEmit(InterestsUiState.Error(it))
-                },
-            )
+                    _topicList.tryEmit(topics.data)
+                }
+                is Result.Error -> {
+                    //TODO: Handle error codes differently
+                    _uiState.tryEmit(InterestsUiState.Error(topics.error))
+                }
+            }
         }
     }
 
