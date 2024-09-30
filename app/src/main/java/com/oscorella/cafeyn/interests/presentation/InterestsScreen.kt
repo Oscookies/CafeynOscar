@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +58,8 @@ fun SharedTransitionScope.InterestsScreen(
         topics,
         favoriteTopics,
         interestsViewModel::addToFavorites,
-        interestsViewModel::deleteFavorite
+        interestsViewModel::deleteFavorite,
+        interestsViewModel::saveFavorites,
     )
 
 }
@@ -70,7 +72,8 @@ fun SharedTransitionScope.InterestsContent(
     topics: List<Topic>,
     favoriteTopics: List<Topic>,
     addToFavorites: (Topic, Int) -> Unit,
-    deleteFromFavorites: (Topic) -> Unit
+    deleteFromFavorites: (Topic) -> Unit,
+    saveFavorites: () -> Unit
 ) {
 
     Column(
@@ -82,6 +85,12 @@ fun SharedTransitionScope.InterestsContent(
     ) {
 
         when(uiState) {
+            is InterestsUiState.FavoritesSaved -> {
+                LaunchedEffect(key1 = uiState) {
+                    onNavigateBack()
+                }
+
+            }
             is InterestsUiState.Loading -> {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -123,12 +132,16 @@ fun SharedTransitionScope.InterestsContent(
                                 state = rememberSharedContentState(key = "text"),
                                 animatedVisibilityScope = animatedVisibilityScope,
                                 boundsTransform = { _, _ ->
-                                    tween(durationMillis = 1000)
+                                    tween(durationMillis = 500)
                                 }
                             )
                     )
                     Text(
-                        text = stringResource(R.string.save)
+                        text = stringResource(R.string.save),
+                        modifier = Modifier
+                            .clickable {
+                                saveFavorites()
+                            }
                     )
                 }
                 Text(
@@ -212,10 +225,9 @@ fun TopicItem(topic: Topic, index: Int, isFav: Boolean, addToFavorites: (Topic, 
         modifier = Modifier
             .padding(vertical = 8.dp)
             .clickable {
-                if(isFav) {
+                if (isFav) {
                     deleteFavorite(topic)
-                }
-                else {
+                } else {
                     addToFavorites(topic, index)
                 }
             }

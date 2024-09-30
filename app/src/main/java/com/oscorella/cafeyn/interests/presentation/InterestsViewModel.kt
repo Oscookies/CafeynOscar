@@ -42,7 +42,7 @@ class InterestsViewModel
         viewModelScope.launch {
             topicRepository.getAllTopics(
                 onSuccess = {
-                    _topicList.value = it
+                    _topicList.tryEmit(it)
                     _uiState.tryEmit(InterestsUiState.Idle)
                 },
                 onError = {
@@ -54,19 +54,28 @@ class InterestsViewModel
 
     private fun getFavoriteTopics() {
         viewModelScope.launch {
-            _favoritesList.value = topicRepository.getFavoriteTopics()
+            _favoritesList.emit(
+                topicRepository.getFavoriteTopics()
+            )
         }
     }
 
     fun addToFavorites(topic: Topic, index: Int) {
+        _topicList.tryEmit(_topicList.value.toMutableList().apply { remove(topic) })
         topic.index = index
-        _topicList.value = _topicList.value.toMutableList().apply { remove(topic) }
-        _favoritesList.value = _favoritesList.value.toMutableList().apply { add(topic) }
+        _favoritesList.tryEmit(_favoritesList.value.toMutableList().apply { add(topic) })
     }
 
     fun deleteFavorite(topic: Topic) {
-        _favoritesList.value = _favoritesList.value.toMutableList().apply { remove(topic) }
-        _topicList.value = _topicList.value.toMutableList().apply { add(topic.index, topic) }
+        _favoritesList.tryEmit(_favoritesList.value.toMutableList().apply { remove(topic) })
+        _topicList.tryEmit(_topicList.value.toMutableList().apply { add(topic.index, topic) })
+    }
+
+    fun saveFavorites() {
+        viewModelScope.launch {
+            topicRepository.saveFavoriteTopics(_favoritesList.value)
+            _uiState.emit(InterestsUiState.FavoritesSaved)
+        }
     }
 }
 
@@ -75,6 +84,8 @@ sealed interface InterestsUiState {
     data object Idle: InterestsUiState
 
     data object Loading: InterestsUiState
+
+    data object FavoritesSaved: InterestsUiState
 
     data class Error(val message: String?): InterestsUiState
 

@@ -53,7 +53,7 @@ fun SharedTransitionScope.HomeScreen(
                         state = rememberSharedContentState(key = "text"),
                         animatedVisibilityScope = animatedVisibilityScope,
                         boundsTransform = { _, _ ->
-                            tween(durationMillis = 1000)
+                            tween(durationMillis = 500)
                         }
                     )
             )
