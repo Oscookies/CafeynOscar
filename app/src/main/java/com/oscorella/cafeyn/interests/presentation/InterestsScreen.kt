@@ -8,6 +8,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +19,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -65,6 +65,7 @@ fun SharedTransitionScope.InterestsScreen(
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SharedTransitionScope.InterestsContent(
     onNavigateBack: () -> Unit,
@@ -185,13 +186,18 @@ fun SharedTransitionScope.InterestsContent(
                     LazyColumn(
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
-                        itemsIndexed(favoriteTopics) { index, item ->
+                        itemsIndexed(
+                            items = favoriteTopics,
+                            key = { _, topic -> topic.id }
+                        ) { index, topic ->
                             TopicItem(
-                                item,
+                                topic,
                                 index,
                                 true,
                                 addToFavorites,
-                                deleteFromFavorites
+                                deleteFromFavorites,
+                                modifier = Modifier
+                                    .animateItem()
                             )
                         }
                     }
@@ -204,13 +210,18 @@ fun SharedTransitionScope.InterestsContent(
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    itemsIndexed(items = topics) { index, item ->
+                    itemsIndexed(
+                        items = topics,
+                        key = { _, topic -> topic.id }
+                    ) { index, topic ->
                         TopicItem(
-                            item,
+                            topic,
                             index,
                             false,
                             addToFavorites,
-                            deleteFromFavorites
+                            deleteFromFavorites,
+                            modifier = Modifier
+                                .animateItem()
                         )
                     }
                 }
@@ -222,10 +233,17 @@ fun SharedTransitionScope.InterestsContent(
 }
 
 @Composable
-fun TopicItem(topic: Topic, index: Int, isFav: Boolean, addToFavorites: (Topic, Int) -> Unit, deleteFavorite: (Topic) -> Unit) {
+fun TopicItem(
+    topic: Topic,
+    index: Int,
+    isFav: Boolean,
+    addToFavorites: (Topic, Int) -> Unit,
+    deleteFavorite: (Topic) -> Unit,
+    modifier: Modifier
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .padding(vertical = 8.dp)
             .clickable {
                 if (isFav) {
