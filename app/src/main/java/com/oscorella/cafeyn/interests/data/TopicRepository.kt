@@ -3,11 +3,8 @@ package com.oscorella.cafeyn.interests.data
 import com.oscorella.cafeyn.core.db.TopicDao
 import com.oscorella.cafeyn.core.db.mapper.asDomain
 import com.oscorella.cafeyn.core.db.mapper.asEntity
-import com.oscorella.cafeyn.core.di.CafeynDispatchers
-import com.oscorella.cafeyn.core.di.Dispatcher
 import com.oscorella.cafeyn.core.network.Result
 import com.oscorella.cafeyn.interests.domain.Topic
-import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 interface TopicRepository {
@@ -22,8 +19,7 @@ interface TopicRepository {
 
 class TopicRepositoryImpl @Inject constructor(
     private val topicService: TopicService,
-    private val topicDao: TopicDao,
-    @Dispatcher(CafeynDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val topicDao: TopicDao
 ) : TopicRepository {
 
     override suspend fun getAllTopics(): Result<List<Topic>> {
