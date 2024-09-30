@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.oscorella.cafeyn.home.HomeScreen
-import com.oscorella.cafeyn.interests.InterestsScreen
+import com.oscorella.cafeyn.interests.presentation.InterestsScreen
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -32,6 +32,9 @@ fun NavGraph(
             composable<Screen.Interests>(
             ) {
                 InterestsScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
                     animatedVisibilityScope = this
                 )
             }
