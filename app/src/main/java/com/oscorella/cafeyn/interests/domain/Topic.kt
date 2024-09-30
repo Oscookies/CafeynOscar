@@ -12,3 +12,9 @@ data class Name (
     val raw: String,
     val key: String = ""
 )
+
+class TopicComparator : Comparator<Topic> {
+    override fun compare(topic1: Topic, topic2: Topic): Int {
+        return topic1.index - topic2.index
+    }
+}

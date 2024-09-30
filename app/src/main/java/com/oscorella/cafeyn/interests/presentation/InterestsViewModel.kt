@@ -2,9 +2,10 @@ package com.oscorella.cafeyn.interests.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.oscorella.cafeyn.core.network.Result
 import com.oscorella.cafeyn.interests.data.TopicRepository
 import com.oscorella.cafeyn.interests.domain.Topic
-import com.oscorella.cafeyn.core.network.Result
+import com.oscorella.cafeyn.interests.domain.TopicComparator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.TreeSet
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,12 +41,15 @@ class InterestsViewModel
     private val _topicList: MutableStateFlow<List<Topic>> = MutableStateFlow(emptyList())
     val topicList: StateFlow<List<Topic>> = _topicList.asStateFlow()
 
+    private val orderedTopics: TreeSet<Topic> = TreeSet(TopicComparator())
+
     private fun getTopics() {
         viewModelScope.launch {
             when (val topics = topicRepository.getAllTopics()) {
                 is Result.Success -> {
                     _uiState.tryEmit(InterestsUiState.Idle)
-                    _topicList.tryEmit(topics.data)
+                    orderedTopics.addAll(topics.data)
+                    _topicList.tryEmit(orderedTopics.toList())
                 }
                 is Result.Error -> {
                     //TODO: Handle error codes differently
@@ -63,14 +68,15 @@ class InterestsViewModel
     }
 
     fun addToFavorites(topic: Topic, index: Int) {
-        _topicList.tryEmit(_topicList.value.toMutableList().apply { remove(topic) })
-        topic.index = index
+        orderedTopics.remove(topic)
+        _topicList.tryEmit(orderedTopics.toList())
         _favoritesList.tryEmit(_favoritesList.value.toMutableList().apply { add(topic) })
     }
 
     fun deleteFavorite(topic: Topic) {
         _favoritesList.tryEmit(_favoritesList.value.toMutableList().apply { remove(topic) })
-        _topicList.tryEmit(_topicList.value.toMutableList().apply { add(topic.index, topic) })
+        orderedTopics.add(topic)
+        _topicList.tryEmit(orderedTopics.toList())
     }
 
     fun saveFavorites() {

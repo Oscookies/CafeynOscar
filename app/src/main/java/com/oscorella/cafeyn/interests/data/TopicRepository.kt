@@ -31,6 +31,9 @@ class TopicRepositoryImpl @Inject constructor(
         return if(response.isSuccessful) {
             response.body()?.let { data ->
                 val flattenedList = data.flatMap { topic -> mutableListOf(topic).also { it.addAll(topic.subTopics) }  }
+                flattenedList.forEachIndexed { index, topic ->
+                    topic.index = index
+                }
                 Result.Success(flattenedList)
             } ?: run {
                 /***
