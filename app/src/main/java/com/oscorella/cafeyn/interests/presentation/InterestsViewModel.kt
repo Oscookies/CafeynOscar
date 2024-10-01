@@ -24,6 +24,7 @@ class InterestsViewModel
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow<InterestsUiState>(InterestsUiState.Loading)
+    // Publicly exposed ui state that triggers the fetching of topics when collexcted
     val uiState = _uiState
         .onStart {
             getTopics()
@@ -34,29 +35,31 @@ class InterestsViewModel
             initialValue = InterestsUiState.Loading,
         )
 
+    // Holds the current list of favorite topics
     private val _favoritesList: MutableStateFlow<List<Topic>> = MutableStateFlow(emptyList())
     val favoritesList: StateFlow<List<Topic>> = _favoritesList.asStateFlow()
 
+    // Holds the list of all available topics, excluding favorites
     private val _topicList: MutableStateFlow<List<Topic>> = MutableStateFlow(emptyList())
     val topicList: StateFlow<List<Topic>> = _topicList.asStateFlow()
 
+    // TreeSet to maintain ordered topics
     private val orderedTopics: TreeSet<Topic> = TreeSet(TopicComparator())
 
-    private fun getTopics() {
+    fun getTopics() {
         viewModelScope.launch {
             when (val topics = topicRepository.getAllTopics()) {
                 is Result.Success -> {
                     handleSuccessResult(topics.data)
                 }
                 is Result.Error -> {
-                    //TODO: Handle error codes differently
-                    _uiState.tryEmit(InterestsUiState.Error(topics.error))
+                    _uiState.tryEmit(InterestsUiState.Error(topics.error.plus(topics.errorCode)))
                 }
             }
         }
     }
 
-    private suspend  fun handleSuccessResult(topics: List<Topic>) {
+    suspend fun handleSuccessResult(topics: List<Topic>) {
         val favoriteTopics = topicRepository.getFavoriteTopics()
         orderedTopics.addAll(topics)
         orderedTopics.removeAll(favoriteTopics.toSet())

@@ -26,15 +26,15 @@ class TopicRepositoryImpl @Inject constructor(
         val response = topicService.getTopics()
         return if(response.isSuccessful) {
             response.body()?.let { data ->
+                // Flatmap topics and subtopics into a single list
                 val flattenedList = data.flatMap { topic -> mutableListOf(topic).also { it.addAll(topic.subTopics) }  }
+                // Add index to topics to be able to sort them inside a TreeSet
                 flattenedList.forEachIndexed { index, topic ->
                     topic.index = index
                 }
                 Result.Success(flattenedList)
             } ?: run {
-                /***
-                 * We assume that if the response is null, there is an error.
-                 */
+                 // We assume that if the response is null, there is an error.
                 Result.Error(response.message(), response.code())
             }
         }

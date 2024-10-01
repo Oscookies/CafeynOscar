@@ -42,7 +42,7 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideAuthApi(retrofit: Retrofit): TopicService {
+    fun provideTopicApi(retrofit: Retrofit): TopicService {
         return retrofit.create(TopicService::class.java)
     }
 

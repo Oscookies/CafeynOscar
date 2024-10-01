@@ -5,13 +5,6 @@ plugins {
     id("com.google.dagger.hilt.android")
     id ("org.jetbrains.kotlin.plugin.serialization")
     id("kotlin-parcelize")
-
-//    alias(libs.plugins.android.application) apply false
-//    alias(libs.plugins.kotlin.android) apply false
-//    alias(libs.plugins.kotlin.kapt) apply false
-//    alias(libs.plugins.hilt.gradle) apply false
-//    alias(libs.plugins.kotlin.parcelize) apply false
-//    alias(libs.plugins.kotlin.serialization) apply false
 }
 
 android {
@@ -93,7 +86,6 @@ dependencies {
     //Testing
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-//    testImplementation ("com.squareup.okhttp3:mockwebserver:4.3.1")
-//    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-//    testImplementation ("org.mockito:mockito-core:4.0.0")
+    testImplementation (libs.mockwebserver)
+    testImplementation (libs.mockito.core)
 }

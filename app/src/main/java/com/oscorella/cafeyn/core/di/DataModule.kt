@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 interface DataModule {
 
     @Binds
-    fun bindsAuthenticationRepo(
+    fun bindsTopicRepo(
         topicRepositoryImpl: TopicRepositoryImpl
     ): TopicRepository
 

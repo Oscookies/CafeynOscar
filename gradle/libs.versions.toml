@@ -1,20 +1,11 @@
 [versions]
 androidGradlePlugin = "8.2.2"
 androidxActivity = "1.6.1"
-androidxComposeCompiler = "1.4.3"
 androidxCore = "1.9.0"
 androidxHilt = "1.2.0"
 androidxLifecycle = "2.6.0"
 androidxNavigation = "2.8.0-beta03"
-androidxRoom = "2.5.0"
 androidxComposeBom = "2024.09.02"
-androidxTestCore = "1.5.0"
-androidxTestExt = "1.1.5"
-androidxTestRunner = "1.5.2"
-compose = "1.2.1"
-animation = "1.7.2"
-foundation = "1.7.2"
-composeWear = "1.0.0"
 converterGson = "2.9.0"
 coroutines = "1.6.4"
 hilt = "2.51.1"
@@ -24,25 +15,23 @@ kotlinxSerializationJson = "1.4.21"
 lifecycleProcess = "2.8.2"
 retrofit = "2.9.0"
 roomDb = "2.6.1"
+mockwebserver = "4.3.1"
+mockito = "4.0.0"
 
 [libraries]
-android-tools-build-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
-androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidxComposeCompiler" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui"}
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics"}
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview"}
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4"}
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation"}
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation"}
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHilt" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleProcess" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
-androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
 androidx-navigation-runtime-ktx = { module = "androidx.navigation:navigation-runtime-ktx", version.ref = "androidxNavigation" }
@@ -53,28 +42,16 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
-hilt-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "mockwebserver" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 junit = { module = "junit:junit", version.ref = "junit" }
-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-kotlin-parcelize = { id = "kotlin-parcelize", version = "unspecified" }
-sample-android-application = { id = "sample.android.application", version = "unspecified" }
-sample-android-library = { id = "sample.android.library", version = "unspecified" }
-sample-android-test = { id = "sample.android.test", version = "unspecified" }
-sample-compose = { id = "sample.compose", version = "unspecified" }
-sample-dynamic = { id = "sample.dynamic", version = "unspecified" }

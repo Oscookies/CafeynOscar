@@ -8,7 +8,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -64,8 +63,6 @@ fun SharedTransitionScope.InterestsScreen(
     )
 
 }
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SharedTransitionScope.InterestsContent(
     onNavigateBack: () -> Unit,
@@ -101,15 +98,7 @@ fun SharedTransitionScope.InterestsContent(
             is InterestsUiState.Error -> {
                 Text(
                     text = "Error: ".plus(uiState.message),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier
-                        .sharedElement(
-                            state = rememberSharedContentState(key = "text"),
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            boundsTransform = { _, _ ->
-                                tween(durationMillis = 1000)
-                            }
-                        )
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
             InterestsUiState.Idle -> {
@@ -188,7 +177,7 @@ fun SharedTransitionScope.InterestsContent(
                     ) {
                         itemsIndexed(
                             items = favoriteTopics,
-                            key = { _, topic -> topic.id }
+                            key = { _, topic -> topic.index }
                         ) { index, topic ->
                             TopicItem(
                                 topic,
@@ -212,7 +201,7 @@ fun SharedTransitionScope.InterestsContent(
                 ) {
                     itemsIndexed(
                         items = topics,
-                        key = { _, topic -> topic.id }
+                        key = { _, topic -> topic.index }
                     ) { index, topic ->
                         TopicItem(
                             topic,
