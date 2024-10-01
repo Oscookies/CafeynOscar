@@ -3,6 +3,6 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.hilt.gradle) apply false
-    alias(libs.plugins.kotlin.serialization) apply false //id ("org.jetbrains.kotlin.plugin.serialization") version "1.4.21" apply false
-    alias(libs.plugins.kotlin.jvm) apply false //    kotlin("jvm") version "1.4.21"
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
 }
