@@ -23,23 +23,28 @@ class TopicRepositoryImpl @Inject constructor(
 ) : TopicRepository {
 
     override suspend fun getAllTopics(): Result<List<Topic>> {
-        val response = topicService.getTopics()
-        return if(response.isSuccessful) {
-            response.body()?.let { data ->
-                // Flatmap topics and subtopics into a single list
-                val flattenedList = data.flatMap { topic -> mutableListOf(topic).also { it.addAll(topic.subTopics) }  }
-                // Add index to topics to be able to sort them inside a TreeSet
-                flattenedList.forEachIndexed { index, topic ->
-                    topic.index = index
+        try {
+            val response = topicService.getTopics()
+            return if(response.isSuccessful) {
+                response.body()?.let { data ->
+                    // Flatmap topics and subtopics into a single list
+                    val flattenedList = data.flatMap { topic -> mutableListOf(topic).also { it.addAll(topic.subTopics) }  }
+                    // Add index to topics to be able to sort them inside a TreeSet
+                    flattenedList.forEachIndexed { index, topic ->
+                        topic.index = index
+                    }
+                    Result.Success(flattenedList)
+                } ?: run {
+                    // We assume that if the response is null, there is an error.
+                    Result.Error(response.message(), response.code())
                 }
-                Result.Success(flattenedList)
-            } ?: run {
-                 // We assume that if the response is null, there is an error.
+            }
+            else {
                 Result.Error(response.message(), response.code())
             }
         }
-        else {
-            Result.Error(response.message(), response.code())
+        catch (exception: Exception){
+            return Result.Error(exception.message)
         }
     }
 
